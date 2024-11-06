@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Crime Classification Model</title>
+    <!-- Include Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Include Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha384-abc123" crossorigin="anonymous" />
+    <!-- Custom CSS -->
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #1abc9c, #3498db);
+            font-family: 'Montserrat', sans-serif;
+            color: #fff;
+            overflow: hidden;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .title {
+            font-size: 2.5em;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            animation: fadeInDown 1s ease both;
+        }
+        .subtitle {
+            font-size: 1.2em;
+            font-weight: 400;
+            margin-bottom: 40px;
+            text-align: center;
+            max-width: 600px;
+            line-height: 1.5;
+            animation: fadeInDown 1s ease both;
+            animation-delay: 0.3s;
+        }
+        .input-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            animation: fadeInUp 1s ease both;
+            animation-delay: 0.6s;
+        }
+        #inputText {
+            width: 100%;
+            height: 180px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 15px;
+            font-size: 1em;
+            color: #fff;
+            outline: none;
+            resize: none;
+            backdrop-filter: blur(10px);
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.2);
+            transition: background 0.3s ease;
+        }
+        #inputText::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+        #inputText:focus {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        .input-container::after {
+            content: '';
+            position: absolute;
+            top: -5px;
+            bottom: -5px;
+            left: -5px;
+            right: -5px;
+            border-radius: 20px;
+            background: linear-gradient(45deg, #ff0066, #ffcc00, #33ccff, #ff0066);
+            background-size: 400% 400%;
+            animation: gradientBorder 10s ease infinite;
+            z-index: -1;
+        }
+        .result-box {
+            margin-top: 40px;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            width: 100%;
+            max-width: 800px;
+            text-align: center;
+            animation: fadeInUp 1s ease both;
+            animation-delay: 0.9s;
+        }
+        .result-box h2 {
+            font-size: 1.8em;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+        .result-box p {
+            font-size: 1.2em;
+            margin: 10px 0;
+        }
+        .result-box span {
+            font-weight: 500;
+            color: #ffcc00;
+        }
+        footer {
+            position: absolute;
+            bottom: 20px;
+            text-align: center;
+            width: 100%;
+            font-size: 0.9em;
+            animation: fadeInUp 1s ease both;
+            animation-delay: 1.2s;
+        }
+        footer .signature {
+            margin-top: 5px;
+            font-size: 0.8em;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        @keyframes gradientBorder {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+        }
+    </style>
+    <!-- Include jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="title">Crime Classification</div>
+        <div class="subtitle">Enter crime-related information below to get real-time predictions.</div>
+    
+        <div class="input-container">
+            <textarea id="inputText" placeholder="Type crime information here..."></textarea>
+        </div>
+    
+        <div id="predictions" class="result-box">
+            <h2><i class="fas fa-balance-scale-left"></i> Predictions</h2>
+            <p><strong>Predicted Category:</strong> <span id="predictedCategory">N/A</span></p>
+            <p><strong>Predicted Sub-category:</strong> <span id="predictedSubCategory">N/A</span></p>
+        </div>
+    </div>
+    
+    <footer>
+        &copy; 2023 Crime Classification Model
+        <div class="signature">Made by Akshay Kotish</div>
+    </footer>
+    
+    <script>
+        $(document).ready(function(){
+            let typingTimer;
+            let doneTypingInterval = 500; // Delay in milliseconds
+    
+            $('#inputText').on('keyup', function(){
+                clearTimeout(typingTimer);
+                typingTimer = setTimeout(doneTyping, doneTypingInterval);
+            });
+    
+            $('#inputText').on('keydown', function(){
+                clearTimeout(typingTimer);
+            });
+    
+            function doneTyping () {
+                var text = $('#inputText').val();
+                if(text.length > 0){
+                    $.ajax({
+                        url: '/predict',
+                        type: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify({'text': text}),
+                        success: function(response){
+                            $('#predictedCategory').text(response.category);
+                            $('#predictedSubCategory').text(response.sub_category);
+                        },
+                        error: function(){
+                            $('#predictedCategory').text('Error');
+                            $('#predictedSubCategory').text('Error');
+                        }
+                    });
+                } else {
+                    $('#predictedCategory').text('N/A');
+                    $('#predictedSubCategory').text('N/A');
+                }
+            }
+        });
+    </script>
+</body>
+</html>
