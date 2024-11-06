@@ -1,5 +1,3 @@
-Certainly! I've updated the `README.md` file to include `screenshot.png`. Below is the updated content that you can use for your GitHub repository.
-
 ---
 
 # Crime Classification Model from Scratch
@@ -326,7 +324,7 @@ http://localhost:5000
 
 ## Screenshot
 
-![Screenshot of the Application](screenshot.png)
+![Screenshot of the Application](Screenshot.png)
 
 *An example of the web application's interface showcasing the input area and real-time predictions.*
 
