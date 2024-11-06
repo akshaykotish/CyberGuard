@@ -212,7 +212,7 @@ pip install tensorflow pandas scikit-learn numpy flask
 #### 1. **Clone the Repository**
 
 ```bash
-git clone https://github.com/yourusername/crime-classification.git
+git clone https://github.com/akshaykotish/CyberGuard
 cd crime-classification
 ```
 
