@@ -213,7 +213,7 @@ pip install tensorflow pandas scikit-learn numpy flask
 
 ```bash
 git clone https://github.com/akshaykotish/CyberGuard
-cd crime-classification
+cd CyberGuard
 ```
 
 #### 2. **Prepare the Dataset**
